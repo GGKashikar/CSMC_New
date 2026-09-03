@@ -7,7 +7,8 @@ import type { CivicRecord } from "@/types/civicCatalog";
 export type { SearchHit };
 
 export function searchHits(query: string): SearchHit[] {
-  return smartSearch(query);
+  // Normalize spacing/case edges from typed + voice input before ranking.
+  return smartSearch(query.replace(/\s+/g, " ").trim());
 }
 
 export function searchCatalog(query: string): CivicRecord[] {

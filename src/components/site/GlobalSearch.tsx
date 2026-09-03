@@ -43,7 +43,7 @@ export function GlobalSearch({ compact = false }: { compact?: boolean }) {
   const speechAvailable = !!getSpeechRecognitionCtor();
 
   const hits = useMemo(() => (query.trim().length >= 2 ? searchHits(query) : []), [query]);
-  const best = hits[0];
+  const best = useMemo(() => hits.find((h) => h.isBestAction) ?? hits[0], [hits]);
   const grouped = useMemo(() => {
     const rest = best ? hits.filter((h) => h.record.id !== best.record.id) : hits;
     return groupSearchResults(rest);
@@ -120,7 +120,8 @@ export function GlobalSearch({ compact = false }: { compact?: boolean }) {
     recognition.continuous = false;
     recognition.interimResults = false;
     recognition.onresult = (event) => {
-      const transcript = event.results?.[0]?.[0]?.transcript?.trim();
+      const raw = event.results?.[0]?.[0]?.transcript ?? "";
+      const transcript = raw.replace(/[.,!?;:]+$/g, "").replace(/\s+/g, " ").trim();
       if (transcript) {
         setQuery(transcript);
         setOpen(true);

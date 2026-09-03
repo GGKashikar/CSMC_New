@@ -1,5 +1,6 @@
 import { CIVIC_CATALOG } from "@/data/civicCatalog";
 import { CATEGORY_LABELS, SEARCH_GROUP_ORDER, searchGroupFor } from "@/data/civicLabels";
+import { expandSearchQuery } from "@/lib/searchAliases";
 import type { CivicRecord, SearchGroup } from "@/types/civicCatalog";
 
 export interface SearchHit {
@@ -34,6 +35,7 @@ const INTENT: {
       "property tax", "pay tax", "house tax", "malmatta", "assessment",
       "how can i pay my property tax",
       "मालमत्ता कर", "मालमत्ता कर भरा", "कर भरायचा", "मालमत्ता",
+      "प्रॉपर्टी टॅक्स", "प्रॉपर्टी कर", "प्रॉपर्टी",
     ],
     actionId: "svc-property-tax",
     relatedIds: ["faq-ptax", "dept-ptax", "not-tax-rebate", "gr-tax-rebate", "cc-revenue"],
@@ -44,6 +46,7 @@ const INTENT: {
     phrases: [
       "birth certificate", "birth cert", "janma", "newborn", "i need a birth certificate",
       "जन्म", "जन्म दाखला", "जन्म प्रमाणपत्र", "मला जन्म दाखला हवा",
+      "बर्थ सर्टिफिकेट", "बर्थ",
     ],
     actionId: "svc-birth",
     relatedIds: ["faq-birth", "dept-health", "act-rts", "cc-health"],
@@ -53,6 +56,7 @@ const INTENT: {
   {
     phrases: [
       "death certificate", "death cert", "मृत्यू", "मृत्यू प्रमाणपत्र",
+      "डेथ सर्टिफिकेट", "डेथ",
     ],
     actionId: "svc-death",
     relatedIds: ["dept-health", "act-rts"],
@@ -63,6 +67,7 @@ const INTENT: {
     phrases: [
       "complaint", "grievance", "register a complaint", "lodge complaint", "takaar",
       "तक्रार", "तक्रार नोंदवा", "complaint register",
+      "ग्रिव्हन्स", "कंप्लेंट", "समाधान",
     ],
     actionId: "svc-grievance",
     relatedIds: ["faq-hours", "con-office"],
@@ -73,6 +78,7 @@ const INTENT: {
     phrases: [
       "building permission", "building plan", "construction permission", "i want building permission",
       "bye law", "bye-laws", "dcr", "बांधकाम परवानगी", "बांधकाम",
+      "बिल्डिंग परमिशन", "बिल्डिंग",
     ],
     actionId: "svc-building",
     relatedIds: ["byl-dcr", "dp-2025", "dept-tp", "not-dp-revision", "byl-parking"],
@@ -82,6 +88,7 @@ const INTENT: {
   {
     phrases: [
       "water bill", "water tax", "pay water", "water supply", "पाणी कर", "पाणी बिल", "पाणी",
+      "वॉटर टॅक्स", "वॉटर बिल", "वॉटर",
     ],
     actionId: "svc-water-tax",
     relatedIds: ["cir-water-summer", "faq-hours"],
@@ -100,6 +107,7 @@ const INTENT: {
   {
     phrases: [
       "trade license", "trade licence", "business license", "व्यापार परवाना",
+      "ट्रेड लायसन्स", "बिझनेस लायसन्स",
     ],
     actionId: "svc-trade",
     relatedIds: ["faq-hours"],
@@ -112,6 +120,197 @@ const INTENT: {
     relatedIds: ["gr-swm", "ten-swm"],
     actionEn: "Read circular",
     actionMr: "परिपत्रक वाचा",
+  },
+  {
+    phrases: [
+      "tourism",
+      "tourist",
+      "tourist places",
+      "places to visit",
+      "heritage sites",
+      "explore sambhajinagar",
+      "explore city",
+      "sightseeing",
+      "attractions",
+      "पर्यटन",
+      "पर्यटन स्थळे",
+      "पर्यटन स्थळ",
+      "टुरिझम",
+      "टुरिझम्",
+      "टूरिझम",
+      "टूरिस्म",
+      "टुरिस्म",
+      "भेट द्यायची ठिकाणे",
+      "पर्यटन स्थळे पहा",
+      "स्थानिक आकर्षणे",
+      "आकर्षणे",
+    ],
+    actionId: "svc-tourism",
+    relatedIds: ["svc-how-to-reach"],
+    actionEn: "Explore places",
+    actionMr: "स्थळे शोधा",
+  },
+  {
+    phrases: ["how to reach", "reach city", "airport", "railway", "कसे पोहोचावे", "कसे पोहचावे", "एअरपोर्ट", "हाउ टू रीच"],
+    actionId: "svc-how-to-reach",
+    relatedIds: ["svc-tourism"],
+    actionEn: "How to reach",
+    actionMr: "कसे पोहोचावे",
+  },
+  {
+    phrases: [
+      "know your corporator", "corporator", "councillor",
+      "नगरसेवक", "तुमचा नगरसेवक", "कॉर्पोरेटर",
+    ],
+    actionId: "svc-corporator",
+    relatedIds: ["svc-zones-wards", "svc-prabhag"],
+    actionEn: "Find corporator",
+    actionMr: "नगरसेवक शोधा",
+  },
+  {
+    phrases: [
+      "zone", "ward", "prabhag", "zones", "wards",
+      "झोन", "वॉर्ड", "प्रभाग", "तुमचा झोन",
+    ],
+    actionId: "svc-zones-wards",
+    relatedIds: ["svc-corporator", "svc-prabhag"],
+    actionEn: "Open map",
+    actionMr: "नकाशा उघडा",
+  },
+  {
+    phrases: ["prabhag 2025", "प्रभाग २०२५", "prabhag list"],
+    actionId: "svc-prabhag",
+    relatedIds: ["svc-zones-wards", "svc-corporator"],
+    actionEn: "View prabhags",
+    actionMr: "प्रभाग पहा",
+  },
+  {
+    phrases: [
+      "city alerts", "alerts", "public advisory",
+      "शहर इशारे", "इशारे", "सिटी अलर्ट्स", "अलर्ट",
+    ],
+    actionId: "svc-city-alerts",
+    relatedIds: ["svc-notices"],
+    actionEn: "View alerts",
+    actionMr: "इशारे पहा",
+  },
+  {
+    phrases: [
+      "public facilities", "facilities", "hospital", "school", "cfc",
+      "सार्वजनिक सुविधा", "सुविधा", "फॅसिलिटीज", "हॉस्पिटल",
+    ],
+    actionId: "svc-facilities",
+    relatedIds: [],
+    actionEn: "View facilities",
+    actionMr: "सुविधा पहा",
+  },
+  {
+    phrases: [
+      "knowledge repository", "digital repository", "repository",
+      "ज्ञान भांडार", "रिपॉझिटरी",
+    ],
+    actionId: "svc-repository",
+    relatedIds: ["svc-public-documents"],
+    actionEn: "Open repository",
+    actionMr: "भांडार उघडा",
+  },
+  {
+    phrases: ["notices", "notice", "सूचना", "नोटिस", "घोषणा"],
+    actionId: "svc-notices",
+    relatedIds: ["svc-city-alerts"],
+    actionEn: "View notices",
+    actionMr: "सूचना पहा",
+  },
+  {
+    phrases: ["public documents", "documents", "दस्तऐवज", "सार्वजनिक दस्तऐवज", "डॉक्युमेंट्स"],
+    actionId: "svc-public-documents",
+    relatedIds: ["svc-repository"],
+    actionEn: "View documents",
+    actionMr: "दस्तऐवज पहा",
+  },
+  {
+    phrases: ["tax calculator", "calculator", "कर कॅल्क्युलेटर", "टॅक्स कॅल्क्युलेटर", "कॅल्क्युलेटर"],
+    actionId: "svc-tax-calculator",
+    relatedIds: ["svc-property-tax"],
+    actionEn: "Open calculator",
+    actionMr: "कॅल्क्युलेटर उघडा",
+  },
+  {
+    phrases: ["track application", "application status", "अर्ज स्थिती", "ट्रॅक", "अॅप्लिकेशन स्टेटस"],
+    actionId: "svc-track",
+    relatedIds: ["svc-grievance"],
+    actionEn: "Track status",
+    actionMr: "स्थिती तपासा",
+  },
+  {
+    phrases: ["faq", "faqs", "सामान्य प्रश्न", "एफएक्यू"],
+    actionId: "svc-faq",
+    relatedIds: ["faq-hours", "faq-ptax", "faq-birth"],
+    actionEn: "Open FAQs",
+    actionMr: "प्रश्न पहा",
+  },
+  {
+    phrases: ["departments", "department", "विभाग", "डिपार्टमेंट"],
+    actionId: "svc-departments",
+    relatedIds: ["dept-health", "dept-tp", "dept-ptax"],
+    actionEn: "View departments",
+    actionMr: "विभाग पहा",
+  },
+  {
+    phrases: ["recruitment", "jobs", "vacancy", "भरती", "रिक्रूटमेंट", "जॉब्स"],
+    actionId: "svc-recruitment",
+    relatedIds: ["not-recruitment"],
+    actionEn: "View recruitment",
+    actionMr: "भरती पहा",
+  },
+  {
+    phrases: ["contact", "संपर्क", "कॉन्टॅक्ट", "अभिप्राय"],
+    actionId: "svc-contact",
+    relatedIds: ["con-office"],
+    actionEn: "Contact CSMC",
+    actionMr: "संपर्क करा",
+  },
+  {
+    phrases: ["disaster", "emergency", "fire", "आपत्कालीन", "अग्निशमन", "डिझास्टर", "इमर्जन्सी"],
+    actionId: "svc-disaster",
+    relatedIds: ["con-fire", "con-disaster"],
+    actionEn: "Emergency info",
+    actionMr: "आपत्कालीन माहिती",
+  },
+  {
+    phrases: ["election", "elections", "voter", "निवडणूक", "मतदार", "इलेक्शन"],
+    actionId: "svc-elections",
+    relatedIds: [],
+    actionEn: "Elections",
+    actionMr: "निवडणूक",
+  },
+  {
+    phrases: ["services", "citizen services", "नागरिक सेवा", "सर्व्हिसेस", "सर्व सेवा"],
+    actionId: "svc-services-hub",
+    relatedIds: ["svc-property-tax", "svc-water-tax", "svc-birth"],
+    actionEn: "All services",
+    actionMr: "सर्व सेवा",
+  },
+  {
+    phrases: ["user manual", "वापरकर्ता नियमावली", "युजर मॅन्युअल", "मॅन्युअल"],
+    actionId: "svc-user-manual",
+    relatedIds: [],
+    actionEn: "User manual",
+    actionMr: "नियमावली",
+  },
+  {
+    phrases: ["about csmc", "about", "परिचय", "अबाउट"],
+    actionId: "svc-about",
+    relatedIds: [],
+    actionEn: "About CSMC",
+    actionMr: "परिचय",
+  },
+  {
+    phrases: ["govt orders", "government orders", "शासन निर्णय", "गव्हर्नमेंट ऑर्डर्स"],
+    actionId: "svc-govt-orders",
+    relatedIds: ["gr-tax-rebate", "gr-swm"],
+    actionEn: "Govt. orders",
+    actionMr: "शासन निर्णय",
   },
 ];
 
@@ -146,11 +345,18 @@ function levenshtein(a: string, b: string) {
 function fuzzyIncludes(hay: string, needle: string) {
   if (!needle) return false;
   if (hay.includes(needle)) return true;
-  if (needle.length >= 3 && [...hay.split(" ")].some((w) => w.startsWith(needle) || needle.startsWith(w))) {
-    return true;
+  const words = hay.split(/\s+/).filter((w) => w.length > 0);
+  // Prefix matches only on meaningful stems — never let "to" match "tourism".
+  if (needle.length >= 3) {
+    for (const w of words) {
+      if (w.length < 3) continue;
+      if (w.startsWith(needle)) return true;
+      // Query starts with a catalog word only if that word is a real stem (≥4 chars).
+      if (w.length >= 4 && needle.startsWith(w)) return true;
+    }
   }
   if (needle.length >= 4) {
-    return hay.split(" ").some((w) => w.length >= 4 && levenshtein(w, needle) <= 1);
+    return words.some((w) => w.length >= 4 && levenshtein(w, needle) <= 1);
   }
   return false;
 }
@@ -176,17 +382,28 @@ function highlightSnippet(text: string, queryTokens: string[], max = 180) {
 
 function detectIntent(q: string) {
   const n = norm(q);
-  const isProperty = n.includes("property") || n.includes("मालमत्ता") || n.includes("house tax");
-  const isWater = n.includes("water") || n.includes("पाणी");
+  const isProperty = n.includes("property") || n.includes("मालमत्ता") || n.includes("house tax") || n.includes("प्रॉपर्टी");
+  const isWater = (n.includes("water") || n.includes("पाणी") || n.includes("वॉटर")) && !isProperty;
   let best: (typeof INTENT)[number] | null = null;
   let bestScore = 0;
   for (const intent of INTENT) {
     if (intent.actionId === "svc-water-tax" && isProperty && !isWater) continue;
     if (intent.actionId === "svc-property-tax" && isWater && !isProperty) continue;
+    // Prefer death over birth when both "certificate" contexts appear.
+    if (intent.actionId === "svc-birth" && (n.includes("death") || n.includes("मृत्यू") || n.includes("डेथ"))) continue;
+    if (intent.actionId === "svc-death" && (n.includes("birth") || n.includes("जन्म") || n.includes("बर्थ")) && !n.includes("death") && !n.includes("मृत्यू") && !n.includes("डेथ")) continue;
     let s = 0;
     for (const p of intent.phrases) {
-      if (n.includes(p) || (p.length >= 8 && p.includes(n))) s = Math.max(s, p.length);
-      else if (tokens(p).every((t) => fuzzyIncludes(n, t))) s = Math.max(s, 8);
+      const pn = norm(p);
+      if (!pn) continue;
+      if (n === pn) s = Math.max(s, pn.length + 8);
+      else if (n.includes(pn) || (pn.length >= 8 && n.length >= 4 && pn.includes(n))) {
+        // Short Latin abbreviations must be whole tokens (rti inside certificate).
+        if (/^[a-z0-9]{1,4}$/i.test(pn) && !n.split(/\s+/).includes(pn)) continue;
+        s = Math.max(s, pn.length);
+      } else if (tokens(p).length > 0 && tokens(p).every((t) => fuzzyIncludes(n, t))) {
+        s = Math.max(s, Math.min(12, pn.length));
+      }
     }
     if (s > bestScore) {
       bestScore = s;
@@ -216,7 +433,12 @@ function haystack(r: CivicRecord) {
 
 function actionLabel(r: CivicRecord): { en?: string; mr?: string } {
   if (r.category === "service") {
-    if (/pay|tax|भरा/i.test(r.titleEn)) return { en: "Pay online", mr: "ऑनलाइन भरा" };
+    if (/pay|tax|भरा/i.test(r.titleEn) && !/calculator|कॅल्क्युलेटर/i.test(r.titleEn)) {
+      return { en: "Pay online", mr: "ऑनलाइन भरा" };
+    }
+    if (/svc-(tourism|how-to-reach|corporator|zones|prabhag|city-alerts|facilities|repository|notices|public-documents|tax-calculator|track|faq|departments|recruitment|contact|disaster|elections|services-hub|user-manual|about|govt-orders)/i.test(r.id)) {
+      return { en: "Open page", mr: "पृष्ठ उघडा" };
+    }
     return { en: "Apply now", mr: "आता अर्ज करा" };
   }
   if (r.category === "faq") return { en: "FAQs", mr: "सामान्य प्रश्न" };
@@ -229,8 +451,14 @@ function actionLabel(r: CivicRecord): { en?: string; mr?: string } {
 export function smartSearch(query: string): SearchHit[] {
   const q = norm(query);
   if (q.length < 2) return [];
-  const qTokens = tokens(query);
-  const intent = detectIntent(query);
+  const { expanded, terms: aliasTerms } = expandSearchQuery(query);
+  const searchText = expanded || query;
+  const qTokens = Array.from(
+    new Set([...tokens(query), ...tokens(searchText), ...aliasTerms.flatMap((t) => tokens(t))])
+  );
+  const intent = detectIntent(searchText) ?? detectIntent(query);
+  // Ignore queries that are only stop-words (e.g. "to", "the") unless an intent matched.
+  if (!intent && qTokens.length === 0) return [];
   const scores = new Map<string, SearchHit>();
 
   const bump = (record: CivicRecord, add: number, extra: Partial<SearchHit> = {}) => {
@@ -266,18 +494,21 @@ export function smartSearch(query: string): SearchHit[] {
     const hay = haystack(r);
     let s = 0;
     if (title === q) s += 120;
-    else if (title.includes(q) || qTokens.every((t) => fuzzyIncludes(title, t))) s += 70;
+    else if (title.includes(q)) s += 70;
+    else if (aliasTerms.some((t) => t.length >= 4 && title.includes(norm(t)))) s += 65;
+    else if (qTokens.length > 0 && qTokens.every((t) => fuzzyIncludes(title, t))) s += 70;
 
     for (const t of qTokens) {
+      if (t.length < 3) continue;
       if (fuzzyIncludes(title, t)) s += 18;
-      else if (r.keywords.some((k) => fuzzyIncludes(k, t))) s += 12;
+      else if (r.keywords.some((k) => fuzzyIncludes(norm(k), t))) s += 12;
       else if (fuzzyIncludes(hay, t)) s += 6;
     }
 
     let ocrHit: { page: number; textEn: string; textMr: string } | undefined;
     for (const page of r.ocrPages) {
       const blob = (page.textEn + " " + page.textMr).toLowerCase();
-      if (qTokens.some((t) => t.length >= 4 && blob.includes(t)) || blob.includes(q)) {
+      if (qTokens.some((t) => t.length >= 4 && blob.includes(t)) || (q.length >= 4 && blob.includes(q))) {
         ocrHit = page;
         s += 40;
         break;
@@ -305,10 +536,14 @@ export function smartSearch(query: string): SearchHit[] {
   }
 
   const ranked = [...scores.values()]
-    .filter((h) => h.score > 8)
+    .filter((h) => h.score > 25)
     .sort((a, b) => b.score - a.score || Number(b.record.category === "service") - Number(a.record.category === "service"));
 
-  if (ranked[0] && ranked[0].record.category === "service") ranked[0].isBestAction = true;
+  // Only promote a "best action" when the match is strong (intent or high score).
+  for (const h of ranked) h.isBestAction = false;
+  if (ranked[0] && (intent || ranked[0].score >= 50) && ranked[0].record.category === "service") {
+    ranked[0].isBestAction = true;
+  }
   return ranked;
 }
 

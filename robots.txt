@@ -1,0 +1,20 @@
+# CSMC — Chhatrapati Sambhajinagar Municipal Corporation
+# Allow major search engines to index the official portal.
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: *
+Allow: /
+
+# Update host if your production origin differs (e.g. GitHub Pages user site).
+Sitemap: https://chhsambhajinagarmc.org/CSMC_New/sitemap.xml

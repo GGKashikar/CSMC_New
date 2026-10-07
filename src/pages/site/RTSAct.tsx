@@ -38,6 +38,82 @@ const RTSAct = () => {
       />
 
       <section className="py-10 md:py-12 container space-y-10">
+        <div>
+          <h2 className="font-serif text-xl font-bold text-civic-blue mb-2">
+            {en ? "RTS documents" : "RTS कागदपत्रे"}
+          </h2>
+          <p className="text-sm text-muted-foreground mb-5 max-w-3xl">
+            {en
+              ? "Official Act, rules, gazettes and the municipal office order. Open a document here to read it on this page."
+              : "अधिकृत अधिनियम, नियम, राजपत्रे आणि महापालिकेचा कार्यालयीन आदेश. कागदपत्र याच पानावर वाचण्यासाठी उघडा."}
+          </p>
+
+          {openDoc && (
+            <div className="mb-5">
+              <InPagePdfPreview
+                title={en ? openDoc.titleEn : openDoc.titleMr}
+                fileUrl={rtsDocumentUrl(openDoc.file)}
+                onClose={() => setOpenDocId(null)}
+                closeLabel={en ? "Close" : "बंद करा"}
+                downloadLabel={en ? "Download" : "डाउनलोड"}
+              />
+            </div>
+          )}
+
+          <ul className="grid sm:grid-cols-2 xl:grid-cols-3 gap-4">
+            {RTS_DOCUMENTS.map((doc) => {
+              const title = en ? doc.titleEn : doc.titleMr;
+              const type = en ? doc.typeEn : doc.typeMr;
+              const fileUrl = rtsDocumentUrl(doc.file);
+              return (
+                <li key={doc.id} className="bg-white border border-border rounded-2xl p-4 flex flex-col gap-3">
+                  <div className="flex items-start gap-3">
+                    <div className="h-10 w-10 rounded-xl bg-civic-blue/10 flex items-center justify-center shrink-0">
+                      <FileText className="h-5 w-5 text-civic-blue" />
+                    </div>
+                    <div className="min-w-0">
+                      <button
+                        type="button"
+                        onClick={() => setOpenDocId(doc.id)}
+                        className="text-left text-sm font-semibold text-civic-ink hover:text-civic-blue transition-colors"
+                      >
+                        {title}
+                      </button>
+                      <p className="text-xs text-muted-foreground mt-1 break-all">{doc.file}</p>
+                      <div className="flex flex-wrap items-center gap-2 mt-2">
+                        {type && (
+                          <span className="text-[10px] font-bold uppercase tracking-wide text-civic-blue bg-civic-blue/10 px-2 py-0.5 rounded-full">
+                            {type}
+                          </span>
+                        )}
+                        {doc.date && (
+                          <span className="text-xs text-muted-foreground">{formatCivicDate(doc.date, en)}</span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="mt-auto flex flex-wrap gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setOpenDocId(doc.id)}
+                      className="inline-flex items-center gap-1.5 text-xs font-bold text-white bg-civic-blue rounded-lg px-3 py-1.5 hover:bg-civic-blue/90 transition-colors"
+                    >
+                      {en ? "View document" : "कागदपत्र पहा"}
+                    </button>
+                    <a
+                      href={fileUrl}
+                      download
+                      className="inline-flex items-center gap-1.5 text-xs font-bold text-civic-blue border border-civic-blue rounded-lg px-3 py-1.5 hover:bg-civic-blue hover:text-white transition-colors"
+                    >
+                      <Download className="h-3.5 w-3.5" />
+                      {en ? "Download" : "डाउनलोड"}
+                    </a>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
         <div className="max-w-3xl">
           <p className="text-sm text-foreground/80 leading-relaxed">
             {en
@@ -204,81 +280,6 @@ const RTSAct = () => {
           </ul>
         </div>
 
-        <div>
-          <h2 className="font-serif text-xl font-bold text-civic-blue mb-2">
-            {en ? "RTS documents" : "RTS कागदपत्रे"}
-          </h2>
-          <p className="text-sm text-muted-foreground mb-5 max-w-3xl">
-            {en
-              ? "Official Act, rules, gazettes and the municipal office order. Open a document here to read it on this page."
-              : "अधिकृत अधिनियम, नियम, राजपत्रे आणि महापालिकेचा कार्यालयीन आदेश. कागदपत्र याच पानावर वाचण्यासाठी उघडा."}
-          </p>
-
-          {openDoc && (
-            <div className="mb-5">
-              <InPagePdfPreview
-                title={en ? openDoc.titleEn : openDoc.titleMr}
-                fileUrl={rtsDocumentUrl(openDoc.file)}
-                onClose={() => setOpenDocId(null)}
-                closeLabel={en ? "Close" : "बंद करा"}
-                downloadLabel={en ? "Download" : "डाउनलोड"}
-              />
-            </div>
-          )}
-
-          <ul className="grid sm:grid-cols-2 xl:grid-cols-3 gap-4">
-            {RTS_DOCUMENTS.map((doc) => {
-              const title = en ? doc.titleEn : doc.titleMr;
-              const type = en ? doc.typeEn : doc.typeMr;
-              const fileUrl = rtsDocumentUrl(doc.file);
-              return (
-                <li key={doc.id} className="bg-white border border-border rounded-2xl p-4 flex flex-col gap-3">
-                  <div className="flex items-start gap-3">
-                    <div className="h-10 w-10 rounded-xl bg-civic-blue/10 flex items-center justify-center shrink-0">
-                      <FileText className="h-5 w-5 text-civic-blue" />
-                    </div>
-                    <div className="min-w-0">
-                      <button
-                        type="button"
-                        onClick={() => setOpenDocId(doc.id)}
-                        className="text-left text-sm font-semibold text-civic-ink hover:text-civic-blue transition-colors"
-                      >
-                        {title}
-                      </button>
-                      <div className="flex flex-wrap items-center gap-2 mt-2">
-                        {type && (
-                          <span className="text-[10px] font-bold uppercase tracking-wide text-civic-blue bg-civic-blue/10 px-2 py-0.5 rounded-full">
-                            {type}
-                          </span>
-                        )}
-                        {doc.date && (
-                          <span className="text-xs text-muted-foreground">{formatCivicDate(doc.date, en)}</span>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="mt-auto flex flex-wrap gap-2">
-                    <button
-                      type="button"
-                      onClick={() => setOpenDocId(doc.id)}
-                      className="inline-flex items-center gap-1.5 text-xs font-bold text-white bg-civic-blue rounded-lg px-3 py-1.5 hover:bg-civic-blue/90 transition-colors"
-                    >
-                      {en ? "View document" : "कागदपत्र पहा"}
-                    </button>
-                    <a
-                      href={fileUrl}
-                      download
-                      className="inline-flex items-center gap-1.5 text-xs font-bold text-civic-blue border border-civic-blue rounded-lg px-3 py-1.5 hover:bg-civic-blue hover:text-white transition-colors"
-                    >
-                      <Download className="h-3.5 w-3.5" />
-                      {en ? "Download" : "डाउनलोड"}
-                    </a>
-                  </div>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
       </section>
     </Layout>
   );

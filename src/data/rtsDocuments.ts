@@ -23,6 +23,24 @@ export function rtsDocumentUrl(file: string) {
 
 export const RTS_DOCUMENTS: RtsDocument[] = [
   {
+    id: "rts-adhi-suchana",
+    titleEn: "Adhi Suchana",
+    titleMr: "Adhi Suchana",
+    date: "2025-01-30",
+    typeEn: "Gazette",
+    typeMr: "राजपत्र",
+    file: "Adhi-Suchna.pdf",
+  },
+  {
+    id: "rts-gazette-2025-11-20",
+    titleEn: "Gazette Dt. 20-11-2025",
+    titleMr: "Gazette Dt. 20-11-2025",
+    date: "2025-11-20",
+    typeEn: "Gazette",
+    typeMr: "राजपत्र",
+    file: "Gazette_Dt_20-11-2025.pdf",
+  },
+  {
     id: "rts-act-2015",
     titleEn: "Maharashtra Right to Public Services Act, 2015",
     titleMr: "महाराष्ट्र लोकसेवा हक्क अधिनियम, २०१५",
@@ -41,13 +59,13 @@ export const RTS_DOCUMENTS: RtsDocument[] = [
     file: "RTS_Rules_Gazette2.pdf",
   },
   {
-    id: "rts-adhi-suchana",
-    titleEn: "Adhi Suchana",
-    titleMr: "Adhi Suchana",
-    date: "2025-01-30",
-    typeEn: "Gazette",
-    typeMr: "राजपत्र",
-    file: "Adhi-Suchna.pdf",
+    id: "rts-mc-office-order",
+    titleEn: "Ch. Sambhajinagar M.C. Office Order",
+    titleMr: "Ch. Sambhajinagar M.C. Office Order",
+    date: "2025-09-15",
+    typeEn: "Office order",
+    typeMr: "कार्यालयीन आदेश",
+    file: "Gazette_2.pdf",
   },
   {
     id: "rts-gazette-2025-08-21",
@@ -57,24 +75,6 @@ export const RTS_DOCUMENTS: RtsDocument[] = [
     typeEn: "Gazette",
     typeMr: "राजपत्र",
     file: "Maharashtra_Public_Service_Right_Act_Rules_Gazette_21-08-2025.pdf",
-  },
-  {
-    id: "rts-gazette-2025-11-20",
-    titleEn: "Gazette Dt. 20-11-2025",
-    titleMr: "Gazette Dt. 20-11-2025",
-    date: "2025-11-20",
-    typeEn: "Gazette",
-    typeMr: "राजपत्र",
-    file: "Gazette_Dt_20-11-2025.pdf",
-  },
-  {
-    id: "rts-mc-office-order",
-    titleEn: "Ch. Sambhajinagar M.C. Office Order",
-    titleMr: "Ch. Sambhajinagar M.C. Office Order",
-    date: "2025-09-15",
-    typeEn: "Office order",
-    typeMr: "कार्यालयीन आदेश",
-    file: "Gazette_2.pdf",
   },
 ];
 
